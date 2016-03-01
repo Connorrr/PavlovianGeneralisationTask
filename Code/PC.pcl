@@ -4,7 +4,15 @@ include "PC_Helpers.pcl";
 preset int Age = 18;
 preset int Gender = 1;	# Female = 2;Male = 1
 preset int Group_No = 1;
+preset int Stim_Group = 1;
 
+##  Set first stim
+if (Stim_Group != 1) then
+	CSm.set_filename("Dog1.jpg");
+	CSm.load();
+	CSp.set_filename("Dog6.jpg");
+	CSp.load();
+end;
 
 display_window.set_font_style(display_style_bold);
 # use subject name + time and data for filenames
@@ -390,22 +398,26 @@ if (!SKIP_GEN)then
 				#if (bool( stimulus_manager.stimulus_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
 					CSDC_rate_pic.remove_part(2);
-					CSDC_trial.set_duration(10000-last.reaction_time());
-					CSDC_trial.present();
+					if (10000-last.reaction_time()>50) then
+						CSDC_bare_trial.set_duration(10000-last.reaction_time());
+						CSDC_bare_trial.present();
+					end;
 					term.print_line("CSDCEvent");
 					CSDC_rate_pic.insert_part(2, rate_now_text,0, 370);
 					response_button1 = last.button();
 				end;
 				dog = 5;
 			else
-				CSDD_trial.set_duration(8000);
+				CSDD_trial.set_duration(10000);
 				CSDD_trial.present();
 				if (bool( response_manager.response_count() )) then
 				#if (bool( stimulus_manager.stimulus_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
 					CSDD_rate_pic.remove_part(2);
-					CSDD_trial.set_duration(8000-last.reaction_time());
-					CSDD_trial.present();
+					if (10000-last.reaction_time()>50) then
+						CSDD_bare_trial.set_duration(10000-last.reaction_time());
+						CSDD_bare_trial.present();
+					end;
 					term.print_line("CSDDEvent");
 					CSDD_rate_pic.insert_part(2, rate_now_text,0, 370);
 					response_button1 = last.button();
@@ -480,8 +492,10 @@ begin
 			#if (bool( stimulus_manager.stimulus_count() )) then
 				stimulus_data last = stimulus_manager.last_stimulus_data();
 				CSp_rate_pic.remove_part(2);
-				CSp_trial.set_duration(10000-last.reaction_time());
-				CSp_trial.present();
+				if (10000-last.reaction_time()>50) then
+					CSp_bare_trial.set_duration(10000-last.reaction_time());
+					CSp_bare_trial.present();
+				end;
 				term.print_line("event1");
 				CSp_rate_pic.insert_part(2, rate_now_text,0, 370);
 				response_button1 = last.button();
@@ -494,8 +508,10 @@ begin
 			#if (bool( stimulus_manager.stimulus_count() )) then
 				stimulus_data last = stimulus_manager.last_stimulus_data();
 				CSm_rate_pic.remove_part(2);
-				CSm_trial.set_duration(8000-last.reaction_time());
-				CSm_trial.present();
+				if (80000-last.reaction_time()>50) then
+					CSm_bare_trial.set_duration(8000-last.reaction_time());
+					CSm_bare_trial.present();
+				end;
 				term.print_line("event2");
 				CSm_rate_pic.insert_part(2, rate_now_text,0, 425);
 				response_button1 = last.button();
@@ -507,7 +523,7 @@ begin
 		CSm_rating_trial.set_duration(rndval);
 		CSm_rating_trial.set_duration(rndval);
 		if (IS_CSM_TEST[i] == false) then 
-			CSm_rating_trial.present();
+			CSp_rating_trial.present();
 			if (bool( response_manager.response_count() )) then
 				stimulus_data last = stimulus_manager.last_stimulus_data();
 				response_pic_CSp.remove_part(3);
