@@ -53,11 +53,6 @@ CSp_rating_trial.set_duration(5000/SPEED_UP);
 #ToD:
 #load the filler images to the array
 
-array <bool> IS_POLY2[24];
-array <bool> IS_POLY3[24];
-array <bool> IS_POLY4[24];
-array <bool> IS_POLY5[24];
-
 build_stim_list(NUM_AQUI, IS_CSM);
 sort_stim_list(NUM_AQUI, Group_No, IS_CSM);
 
