@@ -2,7 +2,7 @@
 #Description:	Contains the subroutines used in the experiment
 #Programmer:	Connor Reid (Psy Technician)
 #Created@:		08/08/2013
-#LastMod@:		13/9/2013
+#LastMod@:		29/02/2013
 #ModifiedBy:	John Zhong
 #Copyright@: 	School Of Psychology, Griffith University
 #-------------------------------------------------------------------
@@ -24,18 +24,17 @@ begin;
 
 picture {} default;
 
-text{ caption = "You will be presented with a series of shapes on the computer screen. 
-					\n\nFrom time to time you will also hear a tone following the shapes.
+text{ caption = "You will be presented with a series of dog images on the screen. 
+					\n\nFrom time to time you will also hear audio following the images.
 					\n\nPress SPACE bar to continue."; }text_1;
-text{ caption = "Please pay attention to the shapes on the screen and the tone via 
+text{ caption = "Please pay attention to the images on the screen and the audio via 
 						\n\nyour headphones throughout the experiment.
 						\n\nPress SPACE bar to continue."; }text_2;
-text{ caption = "When you see a shape on the screen, you will see the word \"Rate Now\" appear above the shape.
-						\n\nWhen you see those words, press the Y buttion if you are certain there will be a tone following the shape.
-						\n\nPress the ? button if you are unsure if the tone will follow the shape.
-						\n\nPress the N button if you are certain there will be no tone following the shape.
+text{ caption = "When you see a dog on the screen, you will see the word \"Rate Now\" appear above the image.
+						\n\nWhen you see those words, press the key which most closely describes how likely it is that
+						\n\nthe audio will be played.
 						\n\nPress SPACE bar to continue."; }text_3;
-text{ caption = "Please rate the degree of pleasantness of the shape you just saw"; }reaction_text;
+text{ caption = "Please rate the degree of pleasantness of the dog you just saw"; }reaction_text;
 text{caption="Rate Now";}rate_now_text;
 text{caption="Please take a break ...Press SPACE bar to continue";}break_text;
 text{caption="Now you will do a practice trial before you starting
@@ -69,8 +68,8 @@ bitmap{ filename = "Dog4.jpg"; preload = true; } CSDC;  #DogC
 bitmap{ filename = "Dog5.jpg"; preload = true; } CSDD;  #DogD 
 
 bitmap{ filename = "scale-instruction.bmp"; preload = true; } scale_instruction_bmp;  #instruction for the evaluation
-bitmap{ filename = "scale-rate.bmp"; preload = true; } scale_bmp;  #pleasant scale show for each shape
-bitmap{ filename = "expect-rate.bmp"; preload = true; } expect_bmp;  #expectation scale show for each shape
+bitmap{ filename = "scale-rate.bmp"; preload = true; } scale_bmp;  #pleasant scale show for each dog
+bitmap{ filename = "expect-rate.bmp"; preload = true; } expect_bmp;  #expectation scale show for each dog
 wavefile { filename = "snarl.wav"; } snarl;
 
 picture {
@@ -81,6 +80,11 @@ picture {
 		bitmap expect_bmp;
 		x = 0; y = -425;
 }CSm_rate_pic;
+
+picture {
+	bitmap CSp;
+	x = 0; y = 0;
+} CSp_pic;
 
 picture {
 		bitmap CSp;
@@ -248,17 +252,20 @@ trial {
 	trial_type = specific_response;
 	terminator_button = 5,6,7,8,9,10,11,12,13,14,15;
 	stimulus_event {
-	picture {
-		bitmap CSp;
-		x = 0; y = 0;
-	} CSp_pic;
-	response_active = true;
+		picture CSp_pic;
+		response_active = true;
 	}event1;
 	
 	picture CSp_rate_pic;
 	time = 4000;	#show the prompt in 4 seconds
 	
 } CSp_trial;
+
+trial {
+	trial_duration = 10000;
+	trial_type = fixed;
+	picture CSp_pic;
+} CSp_bare_trial;
 
 picture {
 		bitmap CSm;
@@ -279,16 +286,24 @@ trial {
 } CSm_trial;
 
 trial {
+	trial_duration = 8000;
+	trial_type = fixed;
+	picture CSm_pic;
+} CSm_bare_trial;
+
+picture {
+	bitmap CSDA;
+	x = 0; y = 0;
+} CSDA_pic;
+
+trial {
 	trial_duration = 10000;
 	#trial_type = fixed;
 	trial_type = specific_response;
 	terminator_button = 5,6,7,8,9,10,11,12,13,14,15;
 	stimulus_event {
-	picture {
-		bitmap CSDA;
-		x = 0; y = 0;
-	} CSDA_pic;
-	response_active = true;
+		picture CSDA_pic;
+		response_active = true;
 	}CSDAEvent;
 	
 	picture CSDA_rate_pic;
@@ -298,14 +313,22 @@ trial {
 
 trial {
 	trial_duration = 10000;
+	trial_type = fixed;
+	picture CSDA_pic;
+} CSDA_bare_trial;
+
+picture {
+	bitmap CSDB;
+	x = 0; y = 0;
+} CSDB_pic;
+
+trial {
+	trial_duration = 10000;
 	#trial_type = fixed;
 	trial_type = specific_response;
 	terminator_button = 5,6,7,8,9,10,11,12,13,14,15;
 	stimulus_event {
-	picture {
-		bitmap CSDB;
-		x = 0; y = 0;
-	} CSDB_pic;
+	picture CSDB_pic;
 	response_active = true;
 	}CSDBEvent;
 	
@@ -316,14 +339,22 @@ trial {
 
 trial {
 	trial_duration = 10000;
+	trial_type = fixed;
+	picture CSDB_pic;
+} CSDB_bare_trial;
+
+picture {
+	bitmap CSDC;
+	x = 0; y = 0;
+} CSDC_pic;
+
+trial {
+	trial_duration = 10000;
 	#trial_type = fixed;
 	trial_type = specific_response;
 	terminator_button = 5,6,7,8,9,10,11,12,13,14,15;
 	stimulus_event {
-	picture {
-		bitmap CSDC;
-		x = 0; y = 0;
-	} CSDC_pic;
+	picture CSDC_pic;
 	response_active = true;
 	}CSDCEvent;
 	
@@ -334,14 +365,22 @@ trial {
 
 trial {
 	trial_duration = 10000;
+	trial_type = fixed;
+	picture CSDC_pic;
+} CSDC_bare_trial;
+
+picture {
+	bitmap CSDD;
+	x = 0; y = 0;
+} CSDD_pic;
+
+trial {
+	trial_duration = 10000;
 	#trial_type = fixed;
 	trial_type = specific_response;
 	terminator_button = 5,6,7,8,9,10,11,12,13,14,15;
 	stimulus_event {
-	picture {
-		bitmap CSDD;
-		x = 0; y = 0;
-	} CSDD_pic;
+	picture CSDD_pic;
 	response_active = true;
 	}CSDDEvent;
 	
@@ -349,6 +388,12 @@ trial {
 	time = 4000;	#show the prompt in 4 seconds
 	
 } CSDD_trial;
+
+trial {
+	trial_duration = 10000;
+	trial_type = fixed;
+	picture CSDD_pic;
+} CSDD_bare_trial;
 
 trial {
 	trial_duration = 2000;

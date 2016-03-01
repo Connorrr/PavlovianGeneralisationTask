@@ -22,7 +22,17 @@ int subid = int(logfile.subject());
 output_file out = new output_file;
 out.open(logfile.subject()+"_pc" + ".xls");
 out.print("student number: "+logfile.subject()+"\t"+"Age: "+string(Age)+"\t"+"Gender: "+string(Gender)+"\t"+"Group: "+string(Group_No)+"\n");	#print the trial index
-out.print("Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n");	#print the trial index
+out.print("Phase\tTrial Number\tDog\tExpectancy\tEvaluation\n");	#print the trial index
+
+#------------------------------------------------------------------------------
+# Setup output port
+#------------------------------------------------------------------------------
+if (output_port_manager.port_count() == 0) then
+   term.print( "Forgot to add an output port!" )
+end;
+output_port oport = output_port_manager.get_port( 1 );
+oport.set_pulse_width( 5 );
+oport.send_code( 255 );
 
 fixation_trial.set_duration(5000/SPEED_UP);
 CSp_trial.set_duration(10000/SPEED_UP);
@@ -62,7 +72,7 @@ begin
 end;*/
 
 int phase = 1;
-int shape = 0;
+int dog = 0;
 int rndval = 0;
 int first = 0;
 int second = 0;
@@ -96,9 +106,9 @@ if (!SKIP_TEST) then
 		end;
 		CSp_trial.present();
 		term.print_line(string( last.reaction_time() ));
-		CSp_rate_pic.insert_part(2, rate_now_text,0, 250);
+		CSp_rate_pic.insert_part(2, rate_now_text,0, 370);
 	end;
-	shape = 1;
+	dog = 1;
 	#response_button1 = get_response();
 	blank_trial.present();
 	rndval = random(5000, 15000)/SPEED_UP;
@@ -114,14 +124,16 @@ if (!SKIP_TEST) then
 		CSp_rating_trial.set_duration(5000-last.reaction_time());
 		end;
 		CSp_rating_trial.present();
-		response_pic_CSp.insert_part(2, reaction_text, 0, 250);
-		response_pic_CSp.insert_part(3, scale_bmp, 0, -250);
+		response_pic_CSp.insert_part(2, reaction_text, 0, 370);
+		response_pic_CSp.insert_part(3, scale_bmp, 0, -425);
 	end;						
 
 	break_trial.present();
 end;
 
-#print_1d_bool_array(IS_CSM);
+print_1d_bool_array(IS_CSM);
+
+phase = 1;
 
 ############## Aquisition Phase ##################
 if (!SKIP_AQUI) then
@@ -131,7 +143,12 @@ if (!SKIP_AQUI) then
 	until 
 		i > NUM_AQUI
 	begin
+		
 		fixation_trial.present();
+		
+		if (i == 1)then
+			fixation_trial.set_duration(38000);		#   Change break to 38 seconds
+		end;
 		
 			if (IS_CSM[i] == false) then
 				#
@@ -143,15 +160,15 @@ if (!SKIP_AQUI) then
 					CSp_rate_pic.remove_part(3);
 					CSp_rate_pic.remove_part(2);
 					if (10000-last.reaction_time()>50) then
-					CSp_trial.set_duration(10000-last.reaction_time());
+						CSp_bare_trial.set_duration(10000-last.reaction_time());
+						CSp_bare_trial.present();
 					end;
-					CSp_trial.present();
 					term.print_line("event1");
-					CSp_rate_pic.insert_part(2, rate_now_text,0, 250);
-					CSp_rate_pic.insert_part(3, expect_bmp, 0, -250);
+					CSp_rate_pic.insert_part(2, rate_now_text,0, 370);
+					CSp_rate_pic.insert_part(3, expect_bmp, 0, -425);
 					response_button1 = last.button();
 				end;
-				shape = 1;
+				dog = 1;
 			else
 				
 				CSm_trial.set_duration(8000);
@@ -162,18 +179,18 @@ if (!SKIP_AQUI) then
 					CSm_rate_pic.remove_part(3);
 					CSm_rate_pic.remove_part(2);
 					if (8000-last.reaction_time()>50) then
-						CSm_trial.set_duration(8000-last.reaction_time());
+						CSm_bare_trial.set_duration(8000-last.reaction_time());
+						CSm_bare_trial.present();
 					end;
-					CSm_trial.present();
 					term.print_line("event2");
-					CSm_rate_pic.insert_part(2, rate_now_text,0, 250);
-					CSm_rate_pic.insert_part(3, expect_bmp, 0, -250);
+					CSm_rate_pic.insert_part(2, rate_now_text,0, 370);
+					CSm_rate_pic.insert_part(3, expect_bmp, 0, -425);
 					response_button1 = last.button();
 				end;
 				
 				#response_button1 = get_response();
 				CSm_trial2.present();
-				shape = 2;
+				dog = 2;
 				
 			end;
 			#if (response_button1 == 0)then
@@ -195,8 +212,8 @@ if (!SKIP_AQUI) then
 					end;
 					CSp_rating_trial.present();
 					term.print_line("event4");
-					response_pic_CSp.insert_part(2, reaction_text, 0, 250);
-					response_pic_CSp.insert_part(3, expect_bmp, 0, -250);
+					response_pic_CSp.insert_part(2, reaction_text, 0, 370);
+					response_pic_CSp.insert_part(3, expect_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
 			else
@@ -210,8 +227,8 @@ if (!SKIP_AQUI) then
 					end;
 					CSm_rating_trial.present();
 					term.print_line("event3");
-					response_pic_CSm.insert_part(2, reaction_text, 0, 250);
-					response_pic_CSm.insert_part(3, expect_bmp, 0, -250);
+					response_pic_CSm.insert_part(2, reaction_text, 0, 370);
+					response_pic_CSm.insert_part(3, expect_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
 			end;
@@ -220,11 +237,12 @@ if (!SKIP_AQUI) then
 		#response_button2 = get_response();
 		term.print(response_button2);
 		
-		#"Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n"
-		save_trail_data(phase, i, shape, response_button1, response_button2, out);
+		#"Phase\tTrial Number\tDog\tExpectancy\tEvaluation\n"
+		save_trail_data(phase, i, dog, response_button1, response_button2, out);
 		term.print("\n");
 		i = i + 1;
 	end;
+	fixation_trial.set_duration(5000);
 	break_trial.present();
 end;
 ############## Aquisition Phase ##################
@@ -232,6 +250,7 @@ build_stim_list(NUM_EXTINCT, IS_CSM);
 sort_stim_list(NUM_EXTINCT, Group_No, IS_CSM);
 CSm_trial.set_duration(10000/SPEED_UP);
 phase = 2;
+print_1d_bool_array(IS_CSM);
 ############## Extinction  Phase ##################
 if (!SKIP_EXTINCT) then
 	loop 
@@ -240,6 +259,11 @@ if (!SKIP_EXTINCT) then
 		i > NUM_EXTINCT
 	begin
 		fixation_trial.present();
+		
+		if (i == 1)then
+			fixation_trial.set_duration(38000);		#   Change break to 38 seconds
+		end;
+		
 			if (IS_CSM[i] == false) then 
 				CSp_trial.set_duration(10000);
 				CSp_trial.present();
@@ -248,14 +272,14 @@ if (!SKIP_EXTINCT) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
 					CSp_rate_pic.remove_part(2);
 					if (10000-last.reaction_time()>50) then
-					CSp_trial.set_duration(10000-last.reaction_time());
+						CSp_bare_trial.set_duration(10000-last.reaction_time());
+						CSp_bare_trial.present();
 					end;
-					CSp_trial.present();
 					term.print_line("event1");
-					CSp_rate_pic.insert_part(2, rate_now_text,0, 250);
+					CSp_rate_pic.insert_part(2, rate_now_text,0, 425);
 					response_button1 = last.button();
 				end;
-				shape = 1;
+				dog = 1;
 			else
 				CSm_trial.set_duration(8000);
 				CSm_trial.present();
@@ -264,14 +288,14 @@ if (!SKIP_EXTINCT) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
 					CSm_rate_pic.remove_part(2);
 					if (8000-last.reaction_time()>50) then
-					CSm_trial.set_duration(8000-last.reaction_time());
+						CSm_bare_trial.set_duration(8000-last.reaction_time());
+						CSm_bare_trial.present();
 					end;
-					CSm_trial.present();
 					term.print_line("event2");
-					CSm_rate_pic.insert_part(2, rate_now_text,0, 250);
+					CSm_rate_pic.insert_part(2, rate_now_text,0, 425);
 					response_button1 = last.button();
 				end;
-				shape = 2;
+				dog = 2;
 			end;
 			blank_trial.present();
 			rndval = random(5000, 15000)/SPEED_UP;
@@ -288,8 +312,8 @@ if (!SKIP_EXTINCT) then
 					end;
 					CSp_rating_trial.present();
 					term.print_line("event4");
-					response_pic_CSp.insert_part(2, reaction_text, 0, 250);
-					response_pic_CSp.insert_part(3, scale_bmp, 0, -250);
+					response_pic_CSp.insert_part(2, reaction_text, 0, 370);
+					response_pic_CSp.insert_part(3, scale_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
 			else
@@ -303,8 +327,8 @@ if (!SKIP_EXTINCT) then
 					end;
 					CSm_rating_trial.present();
 					term.print_line("event3");
-					response_pic_CSm.insert_part(2, reaction_text, 0, 250);
-					response_pic_CSm.insert_part(3, scale_bmp, 0, -250);
+					response_pic_CSm.insert_part(2, reaction_text, 0, 370);
+					response_pic_CSm.insert_part(3, scale_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
 			end;
@@ -312,8 +336,8 @@ if (!SKIP_EXTINCT) then
 		#response_button2 = get_response();
 		term.print(response_button2);
 		
-		#"Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n"
-		save_trail_data(phase, i, shape, response_button1, response_button2, out);
+		#"Phase\tTrial Number\tDog\tExpectancy\tEvaluation\n"
+		save_trail_data(phase, i, dog, response_button1, response_button2, out);
 		term.print("\n");
 		i = i + 1;
 	end;	
@@ -322,6 +346,7 @@ end;
 ############## Extinction  Phase ##################
 phase = 3;
 ############## Reinstatement  Phase ###############
+#############  NOT USED IN GENERALISATION  ########
 if (!SKIP_REIN) then
 	loop
 		int i = 1
@@ -340,10 +365,11 @@ if (!SKIP_REIN) then
 	break_trial.present();
 end;
 ############## Reinstatement  Phase ###############
-build_stim_list(NUM_GENERALISATION, IS_CSM);
-sort_stim_list(NUM_GENERALISATION, Group_No, IS_CSM);
+build_test_stim_list(NUM_GENERALISATION, IS_CSDC, Group_No);
 CSm_trial.set_duration(10000/SPEED_UP);
-phase = 4;
+phase = 3;
+fixation_trial.set_duration(5000);
+print_1d_bool_array(IS_CSDC);
 #################### Generalisation  Phase ##################
 if (!SKIP_GEN)then
 	loop 
@@ -352,7 +378,12 @@ if (!SKIP_GEN)then
 		i > NUM_GENERALISATION
 	begin
 		fixation_trial.present();
-			if (IS_CSM[i] == false) then 
+		
+		if (i == 1)then
+			fixation_trial.set_duration(38000);
+		end;
+		
+			if (IS_CSDC[i] == false) then 
 				CSDC_trial.set_duration(10000);
 				CSDC_trial.present();
 				if (bool( response_manager.response_count() )) then
@@ -365,7 +396,7 @@ if (!SKIP_GEN)then
 					CSDC_rate_pic.insert_part(2, rate_now_text,0, 370);
 					response_button1 = last.button();
 				end;
-				shape = 1;
+				dog = 5;
 			else
 				CSDD_trial.set_duration(8000);
 				CSDD_trial.present();
@@ -379,13 +410,13 @@ if (!SKIP_GEN)then
 					CSDD_rate_pic.insert_part(2, rate_now_text,0, 370);
 					response_button1 = last.button();
 				end;
-				shape = 2;
+				dog = 6;
 			end;
 			blank_trial.present();
 			rndval = random(5000, 15000)/SPEED_UP;
 			CSDC_rating_trial.set_duration(rndval);
 			CSDD_rating_trial.set_duration(rndval);
-			if (IS_CSM[i] == false) then 
+			if (IS_CSDC[i] == false) then 
 				CSDC_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -417,17 +448,19 @@ if (!SKIP_GEN)then
 		#response_button2 = get_response();
 		term.print(response_button2);
 		
-		#"Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n"
-		save_trail_data(phase, i, shape, response_button1, response_button2, out);
+		#"Phase\tTrial Number\tDog\tExpectancy\tEvaluation\n"
+		save_trail_data(phase, i, dog, response_button1, response_button2, out);
 		term.print("\n");
 		i = i + 1;
 	end;	
+	break_trial.present();
 end;
 #################### Generalisation  Phase ##################
-build_stim_list(NUM_TEST, IS_CSM);
-sort_stim_list(NUM_TEST, Group_No, IS_CSM);
+fixation_trial.set_duration(5000);
+build_test_stim_list(NUM_GENERALISATION, IS_CSM_TEST, Group_No);
 CSm_trial.set_duration(10000/SPEED_UP);
-phase = 5;
+phase = 4;
+print_1d_bool_array(IS_CSM_TEST);
 #################### Test  Phase ##################
 loop 
 	int i = 1;
@@ -435,7 +468,12 @@ until
 	i > NUM_TEST_EXT
 begin
 	fixation_trial.present();
-		if (IS_CSM[i] == false) then 
+	
+	if (i == 1) then
+		fixation_trial.set_duration(38000);
+	end;
+	
+		if (IS_CSM_TEST[i] == false) then 
 			CSp_trial.set_duration(10000);
 			CSp_trial.present();
 			if (bool( response_manager.response_count() )) then
@@ -445,10 +483,10 @@ begin
 				CSp_trial.set_duration(10000-last.reaction_time());
 				CSp_trial.present();
 				term.print_line("event1");
-				CSp_rate_pic.insert_part(2, rate_now_text,0, 250);
+				CSp_rate_pic.insert_part(2, rate_now_text,0, 370);
 				response_button1 = last.button();
 			end;
-			shape = 1;
+			dog = 1;
 		else
 			CSm_trial.set_duration(8000);
 			CSm_trial.present();
@@ -459,16 +497,16 @@ begin
 				CSm_trial.set_duration(8000-last.reaction_time());
 				CSm_trial.present();
 				term.print_line("event2");
-				CSm_rate_pic.insert_part(2, rate_now_text,0, 250);
+				CSm_rate_pic.insert_part(2, rate_now_text,0, 425);
 				response_button1 = last.button();
 			end;
-			shape = 2;
+			dog = 2;
 		end;
 		blank_trial.present();
 		rndval = random(5000, 15000)/SPEED_UP;
 		CSm_rating_trial.set_duration(rndval);
 		CSm_rating_trial.set_duration(rndval);
-		if (IS_CSM[i] == false) then 
+		if (IS_CSM_TEST[i] == false) then 
 			CSm_rating_trial.present();
 			if (bool( response_manager.response_count() )) then
 				stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -477,8 +515,8 @@ begin
 				CSp_rating_trial.set_duration(5000-last.reaction_time());
 				CSp_rating_trial.present();
 				term.print_line("event4");
-				response_pic_CSp.insert_part(2, reaction_text, 0, 250);
-				response_pic_CSp.insert_part(3, scale_bmp, 0, -250);
+				response_pic_CSp.insert_part(2, reaction_text, 0, 370);
+				response_pic_CSp.insert_part(3, scale_bmp, 0, -425);
 				response_button2 = last.button();
 			end;
 		else
@@ -490,8 +528,8 @@ begin
 				CSm_rating_trial.set_duration(5000-last.reaction_time());
 				CSm_rating_trial.present();
 				term.print_line("event3");
-				response_pic_CSm.insert_part(2, reaction_text, 0, 250);
-			   response_pic_CSm.insert_part(3, scale_bmp, 0, -250);
+				response_pic_CSm.insert_part(2, reaction_text, 0, 370);
+			   response_pic_CSm.insert_part(3, scale_bmp, 0, -425);
 				response_button2 = last.button();
 			end;
 		end;
@@ -500,8 +538,8 @@ begin
 	#response_button2 = get_response();
 	term.print(response_button2);
 	
-	#"Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n"
-	save_trail_data(phase, i, shape, response_button1, response_button2, out);
+	#"Phase\tTrial Number\tDog\tExpectancy\tEvaluation\n"
+	save_trail_data(phase, i, dog, response_button1, response_button2, out);
 	term.print("\n");
 	i = i + 1;
 end;	

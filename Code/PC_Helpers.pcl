@@ -2,7 +2,7 @@
 #Description:	Contains the subroutines used in the experiment
 #Programmer:	Connor Reid (Psy Technician)
 #Created@:		08/08/2013
-#LastMod@:		13/09/2013
+#LastMod@:		29/02/2013
 #ModifiedBy: 	John Zhong
 #Copyright@: 	School Of Psychology, Griffith University
 #-------------------------------------------------------------------
@@ -45,6 +45,32 @@ begin
 		j=j+1;
 	end;
 
+end;
+
+sub 
+	build_test_stim_list(int size, array <bool,1>& trial_list, int group_number)
+begin
+	#get equal number of poly and triangle here
+	loop 
+		int j = 1;
+	until 
+		j > size
+	begin
+		if (j <= (size/2))then
+			if (group_number == 1)then
+				trial_list[j] = false;
+			else
+				trial_list[j] = true;
+			end;
+		else
+			if (group_number == 1)then
+				trial_list[j] = true;
+			else
+				trial_list[j] = false;
+			end;
+		end;
+		j=j+1;
+	end;
 end;
 
 sub
@@ -171,14 +197,14 @@ begin
 end;
 
 sub
-save_trail_data(int phase, int trial_num, int shape, int expectancy, int evaluation, output_file out)
+save_trail_data(int phase, int trial_num, int dog, int expectancy, int evaluation, output_file out)
 begin
 	#"Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n"
 	string expect = "";
 	string eval = "";
-	expectancy=expectancy-1;
+	expectancy=expectancy-10;
 	evaluation=evaluation-10;
-	if (expectancy < 1 || expectancy > 3)then
+	if (expectancy < -5 || expectancy > 5)then
 		expect = "n/a";
 	else
 		expect = string(expectancy);
@@ -190,7 +216,7 @@ begin
 	end;
 	out.print(string(phase) + "\t");
 	out.print(string(trial_num) + "\t");
-	out.print(string(shape) + "\t");
+	out.print(string(dog) + "\t");
 	out.print(expect + "\t");
 	out.print(eval + "\n");
 end;
