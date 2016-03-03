@@ -197,7 +197,7 @@ begin
 end;
 
 sub
-save_trail_data(int phase, int trial_num, int dog, int expectancy, int evaluation, output_file out)
+save_trail_data(int phase, int trial_num, int dog, int expectancy, int evaluation, output_file out, string tt)
 begin
 	#"Phase\tTrial Number\tShape\tExpectancy\tEvaluation\n"
 	string expect = "";
@@ -218,7 +218,8 @@ begin
 	out.print(string(trial_num) + "\t");
 	out.print(string(dog) + "\t");
 	out.print(expect + "\t");
-	out.print(eval + "\n");
+	out.print(eval + "\t");
+	out.print(tt + "\n");
 end;
 #
 sub int num_str_2_int(string str_num)
