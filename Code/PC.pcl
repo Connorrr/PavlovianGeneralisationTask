@@ -151,10 +151,6 @@ if (!SKIP_AQUI) then
 		
 		fixation_trial.present();
 		
-		if (i == 1)then
-			fixation_trial.set_duration(38000);		#   Change break to 38 seconds
-		end;
-		
 			if (IS_CSM[i] == false) then
 				#
 				CSp_trial.set_duration(8000);
@@ -259,7 +255,6 @@ if (!SKIP_AQUI) then
 		term.print("\n");
 		i = i + 1;
 	end;
-	fixation_trial.set_duration(5000);
 	break_trial.present();
 end;
 ############## Aquisition Phase ##################
@@ -408,10 +403,6 @@ if (!SKIP_GEN)then
 	begin
 		fixation_trial.present();
 		
-		if (i == 1)then
-			fixation_trial.set_duration(38000);
-		end;
-		
 			if (IS_CSDC[i] == false) then 
 				CSDC_trial.set_duration(8000);
 				oport.send_code( 16 );
@@ -495,7 +486,6 @@ if (!SKIP_GEN)then
 	break_trial.present();
 end;
 #################### Generalisation  Phase ##################
-fixation_trial.set_duration(5000);
 build_test_stim_list(NUM_GENERALISATION, IS_CSM_TEST, Group_No);
 CSm_trial.set_duration(10000/SPEED_UP);
 phase = 4;
@@ -507,10 +497,6 @@ until
 	i > NUM_TEST_EXT
 begin
 	fixation_trial.present();
-	
-	if (i == 1) then
-		fixation_trial.set_duration(38000);
-	end;
 	
 		if (IS_CSM_TEST[i] == false) then 
 			CSp_trial.set_duration(8000);
