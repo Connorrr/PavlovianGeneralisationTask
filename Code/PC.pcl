@@ -214,7 +214,7 @@ if (!SKIP_AQUI) then
 			CSm_rating_trial.set_duration(rndval);
 			CSp_rating_trial.set_duration(rndval);
 			if (IS_CSM[i] == false) then
-				
+				oport.send_code( 2 );
 				CSp_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -229,7 +229,9 @@ if (!SKIP_AQUI) then
 					response_pic_CSp.insert_part(3, expect_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
+				oport.send_code( 2 );
 			else
+				oport.send_code( 1 );
 				CSm_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -244,6 +246,7 @@ if (!SKIP_AQUI) then
 					response_pic_CSm.insert_part(3, expect_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
+				oport.send_code( 1 );
 			end;
 		#end;
 		
@@ -326,6 +329,7 @@ if (!SKIP_EXTINCT) then
 			CSm_rating_trial.set_duration(rndval);
 			CSp_rating_trial.set_duration(rndval);
 			if (IS_CSM[i] == false) then 
+				oport.send_code( 2 );
 				CSp_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -340,7 +344,9 @@ if (!SKIP_EXTINCT) then
 					response_pic_CSp.insert_part(3, scale_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
+				oport.send_code( 2 );
 			else
+				oport.send_code( 1 );
 				CSm_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -355,6 +361,7 @@ if (!SKIP_EXTINCT) then
 					response_pic_CSm.insert_part(3, scale_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
+				oport.send_code( 1 );
 			end;
 		
 		#response_button2 = get_response();
@@ -447,6 +454,7 @@ if (!SKIP_GEN)then
 			CSDC_rating_trial.set_duration(rndval);
 			CSDD_rating_trial.set_duration(rndval);
 			if (IS_CSDC[i] == false) then 
+				oport.send_code( 16 );
 				CSDC_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -459,7 +467,9 @@ if (!SKIP_GEN)then
 					response_pic_CSDC.insert_part(3, scale_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
+				oport.send_code( 16 );
 			else
+				oport.send_code( 32 );
 				CSDD_rating_trial.present();
 				if (bool( response_manager.response_count() )) then
 					stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -472,6 +482,7 @@ if (!SKIP_GEN)then
 					response_pic_CSDD.insert_part(3, scale_bmp, 0, -425);
 					response_button2 = last.button();
 				end;
+				oport.send_code( 32 );
 			end;
 		#end;
 		
@@ -548,6 +559,7 @@ begin
 		CSm_rating_trial.set_duration(rndval);
 		CSm_rating_trial.set_duration(rndval);
 		if (IS_CSM_TEST[i] == false) then 
+			oport.send_code( 2 );
 			CSp_rating_trial.present();
 			if (bool( response_manager.response_count() )) then
 				stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -560,7 +572,9 @@ begin
 				response_pic_CSp.insert_part(3, scale_bmp, 0, -425);
 				response_button2 = last.button();
 			end;
+			oport.send_code( 2 );
 		else
+			oport.send_code( 1 );
 			CSm_rating_trial.present();
 			if (bool( response_manager.response_count() )) then
 				stimulus_data last = stimulus_manager.last_stimulus_data();
@@ -573,6 +587,7 @@ begin
 			   response_pic_CSm.insert_part(3, scale_bmp, 0, -425);
 				response_button2 = last.button();
 			end;
+			oport.send_code( 1 );
 		end;
 	#end;
 	
