@@ -1,0 +1,9 @@
+Scenario - PC
+Logfile written - 03/13/2017 15:34:59
+
+Subject	Trial	Event Type	Code	Time	TTime	Uncertainty	Duration	Uncertainty	ReqTime	ReqDur	Stim Type	Pair Index
+
+ConnorTestBR1	1	Response	1	15888	5722	1
+ConnorTestBR1	2	Response	1	18848	2851	1
+ConnorTestBR1	3	Response	1	21248	2252	1
+ConnorTestBR1	4	Response	1	23088	1759	1
